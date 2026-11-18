@@ -1,0 +1,15 @@
+{
+  "name": "Gestor Pro - Taller",
+  "short_name": "GestorPro",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050302",
+  "theme_color": "#ea580c",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
