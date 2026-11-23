@@ -1,4 +1,4 @@
-// ====== ESTADO GLOBAL DE LA APLICACIÓN ======
+// ====== ESTADO GLOBAL ======
 let state = {
     user: null,
     ventas: [],
@@ -7,48 +7,49 @@ let state = {
 
 // ====== INICIALIZACIÓN ======
 document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
     verificarSesion();
 });
 
-// ====== AUTENTICACIÓN SEGURA ======
+// ====== AUTENTICACIÓN SEGURA (SIN CORREOS PRE-ESCRITOS) ======
 function verificarSesion() {
     const sesionGuardada = localStorage.getItem('blas_sesion');
     if (sesionGuardada) {
-        state.user = JSON.parse(sesionGuardada);
-        mostrarPanel();
-    } else {
-        mostrarLogin();
+        try {
+            const parsed = JSON.parse(sesionGuardada);
+            if (parsed && parsed.email && parsed.taller) {
+                state.user = parsed;
+                mostrarPanel();
+                return;
+            }
+        } catch (e) {
+            localStorage.removeItem('blas_sesion');
+        }
     }
+    mostrarLogin();
 }
 
-// Iniciar sesión con Google seguro e independiente para cada dispositivo
 function iniciarConGoogle() {
-    // Abre un prompt limpio sin valores fijos ni correos pre-escritos
-    let correoUsuario = prompt("Por favor, ingresa tu dirección de correo electrónico de Google (Gmail) para iniciar sesión:", "");
+    let correoUsuario = prompt("Ingresa tu cuenta de correo de Google (Gmail) para iniciar sesión:", "");
     
-    if (correoUsuario === null) return; // Cancelado
-    correoUsuario = correoUsuario.trim();
+    if (correoUsuario === null) return;
+    correoUsuario = correoUsuario.trim().toLowerCase();
     
-    if (correoUsuario === "") {
-        alert("Debes escribir una dirección de correo válida.");
-        return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(correoUsuario)) {
-        alert("Por favor, ingresa un formato de correo electrónico válido.");
+    if (correoUsuario === "" || !correoUsuario.includes("@")) {
+        alert("Por favor, ingresa una dirección de correo válida.");
         return;
     }
 
     const nombreSugerido = correoUsuario.split('@')[0];
-    const nombreUsuario = prompt(`¿Cómo te gustaría que te llame en el panel?`, nombreSugerido) || nombreSugerido;
+    const nombreUsuario = prompt("¿Cómo te gustaría que aparezca tu nombre?", nombreSugerido) || nombreSugerido;
     const nombreTaller = prompt("¿Cuál es el nombre de tu Taller / Negocio?", "Mi Taller") || "Mi Taller";
 
     state.user = {
-        email: correoUsuario.toLowerCase(),
-        nombre: nombreUsuario,
-        taller: nombreTaller,
+        email: correoUsuario,
+        nombre: nombreUsuario.trim(),
+        taller: nombreTaller.trim(),
         rol: "Administrador"
     };
 
@@ -90,8 +91,8 @@ function mostrarPanel() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app-screen').classList.remove('hidden');
     
-    document.getElementById('header-taller-name').innerText = state.user.taller;
-    document.getElementById('user-display-name').innerText = state.user.nombre;
+    document.getElementById('header-taller-name').innerText = state.user.taller || "Mi Taller";
+    document.getElementById('user-display-name').innerText = state.user.nombre || "Usuario";
 
     cargarDatosUsuario();
     actualizarTablaVentas();
@@ -100,7 +101,7 @@ function mostrarPanel() {
     calcularVentaManual();
 }
 
-// ====== BASE DE DATOS LOCAL SEGÚN USUARIO ======
+// ====== DATOS AISLADOS POR USUARIO ======
 function cargarDatosUsuario() {
     const claveVentas = `blas_ventas_${state.user.email}`;
     const claveClientes = `blas_clientes_${state.user.email}`;
@@ -133,10 +134,10 @@ function cambiarTab(tabId) {
     document.getElementById(`tab-${tabId}`).classList.add('active');
 
     if (tabId === 'reportes') actualizarReportes();
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
-// ====== CALCULADORA DE GANANCIAS PERSONALIZADA ======
+// ====== CALCULADORA MANUAL ======
 function calcularVentaManual() {
     const costoInput = document.getElementById('calc-costo');
     const pctInput = document.getElementById('calc-ganancia-pct');
@@ -158,7 +159,7 @@ function setPorcentajeRapido(pct) {
     calcularVentaManual();
 }
 
-// ====== GESTIÓN DE VENTAS ======
+// ====== VENTAS ======
 function actualizarTablaVentas() {
     const tbody = document.getElementById('tabla-ventas-body');
     tbody.innerHTML = '';
@@ -188,15 +189,15 @@ function actualizarTablaVentas() {
             <td><span class="badge ${statusClass}">${v.estado}</span></td>
             <td>
                 <div class="action-buttons">
-                    ${v.saldo > 0 ? `<button onclick="abrirModalAbono(${v.id})" class="btn-action btn-pay" title="Abonar"><i data-lucide="plus-circle"></i></button>` : ''}
-                    <button onclick="editarVenta(${v.id})" class="btn-action btn-edit" title="Editar"><i data-lucide="edit-3"></i></button>
-                    <button onclick="eliminarVenta(${v.id})" class="btn-action btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button>
+                    ${v.saldo > 0 ? `<button type="button" onclick="abrirModalAbono(${v.id})" class="btn-action btn-pay" title="Abonar"><i data-lucide="plus-circle"></i></button>` : ''}
+                    <button type="button" onclick="editarVenta(${v.id})" class="btn-action btn-edit" title="Editar"><i data-lucide="edit-3"></i></button>
+                    <button type="button" onclick="eliminarVenta(${v.id})" class="btn-action btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button>
                 </div>
             </td>
         `;
         tbody.appendChild(tr);
     });
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function filtrarVentas() {
@@ -282,7 +283,7 @@ function eliminarVenta(id) {
     }
 }
 
-// ====== GESTIÓN DE ABONOS ======
+// ====== ABONOS ======
 function abrirModalAbono(id) {
     const v = state.ventas.find(item => item.id === id);
     if (!v) return;
@@ -328,7 +329,7 @@ function procesarAbonoExtra(event) {
     cerrarModalAbono();
 }
 
-// ====== GESTIÓN DE CLIENTES ======
+// ====== CLIENTES ======
 function actualizarTablaClientes() {
     const tbody = document.getElementById('tabla-clientes-body');
     tbody.innerHTML = '';
@@ -359,13 +360,13 @@ function actualizarTablaClientes() {
             <td><strong>$${totalGastado.toFixed(2)}</strong></td>
             <td>
                 <div class="action-buttons">
-                    <button onclick="eliminarCliente(${c.id})" class="btn-action btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button>
+                    <button type="button" onclick="eliminarCliente(${c.id})" class="btn-action btn-delete" title="Eliminar"><i data-lucide="trash-2"></i></button>
                 </div>
             </td>
         `;
         tbody.appendChild(tr);
     });
-    lucide.createIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function filtrarClientes() {
@@ -404,14 +405,14 @@ function eliminarCliente(id) {
     const c = state.clientes.find(item => item.id === id);
     if (!c) return;
 
-    if (confirm(`¿Estás seguro de eliminar a ${c.nombre}? Se conservarán sus pedidos existentes.`)) {
+    if (confirm(`¿Estás seguro de eliminar a ${c.nombre}?`)) {
         state.clientes = state.clientes.filter(item => item.id !== id);
         guardarDatosLocal();
         actualizarTablaClientes();
     }
 }
 
-// ====== REPORTES & ESTADÍSTICAS ======
+// ====== REPORTES ======
 function actualizarReportes() {
     const totalVendido = state.ventas.reduce((sum, v) => sum + v.total, 0);
     const totalRecaudado = state.ventas.reduce((sum, v) => sum + v.abono, 0);

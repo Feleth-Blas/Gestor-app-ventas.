@@ -6,7 +6,6 @@
     <title>Gestor Pro - Control de Negocio</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
-    <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -15,12 +14,12 @@
         <div class="login-card">
             <span class="badge-tag">SISTEMA DE GESTIÓN</span>
             <div class="login-logo-container">
-                <img src="icon.png" alt="Logo Gestor Pro" id="login-app-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                <img src="icon.png.jpg" alt="Logo Gestor Pro" id="login-app-logo">
             </div>
             <h2>Impulsa tu Taller</h2>
             <p class="subtitle">Conecta tu cuenta y organiza tus ventas al máximo</p>
 
-            <button onclick="iniciarConGoogle()" class="btn-google">
+            <button type="button" onclick="iniciarConGoogle()" class="btn-google">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google logo">
                 Usar cuenta de Google
             </button>
@@ -40,7 +39,7 @@
                 <div class="input-group">
                     <input type="text" id="login-nombre" placeholder="Tu Nombre / Administrador" required>
                 </div>
-                <button type="submit" class="btn-primary">Entrar al Panel →</button>
+                <button type="submit" class="btn-primary w-100">Entrar al Panel →</button>
             </form>
         </div>
     </div>
@@ -49,29 +48,29 @@
     <div id="app-screen" class="app-container hidden">
         <header class="main-header">
             <div class="header-brand">
-                <img src="icon.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
+                <img src="icon.png.jpg" alt="Logo" class="header-logo">
                 <div>
-                    <h1 id="header-taller-name">El Taller de los Blas</h1>
+                    <h1 id="header-taller-name">Mi Taller</h1>
                     <p class="user-welcome">Hola, <span id="user-display-name">Usuario</span> • <span class="badge-role">Admin</span></p>
                 </div>
             </div>
-            <button onclick="cerrarSesion()" class="btn-logout" title="Cerrar sesión">
+            <button type="button" onclick="cerrarSesion()" class="btn-logout" title="Cerrar sesión">
                 <i data-lucide="log-out"></i>
             </button>
         </header>
 
         <!-- Barra de Navegación / Tabs -->
         <nav class="nav-tabs">
-            <button onclick="cambiarTab('ventas')" id="tab-ventas" class="tab-btn active">
+            <button type="button" onclick="cambiarTab('ventas')" id="tab-ventas" class="tab-btn active">
                 <i data-lucide="shopping-cart"></i> Ventas y Pedidos
             </button>
-            <button onclick="cambiarTab('clientes')" id="tab-clientes" class="tab-btn">
+            <button type="button" onclick="cambiarTab('clientes')" id="tab-clientes" class="tab-btn">
                 <i data-lucide="users"></i> Clientes
             </button>
-            <button onclick="cambiarTab('calculadora')" id="tab-calculadora" class="tab-btn">
+            <button type="button" onclick="cambiarTab('calculadora')" id="tab-calculadora" class="tab-btn">
                 <i data-lucide="calculator"></i> Calculadora
             </button>
-            <button onclick="cambiarTab('reportes')" id="tab-reportes" class="tab-btn">
+            <button type="button" onclick="cambiarTab('reportes')" id="tab-reportes" class="tab-btn">
                 <i data-lucide="trending-up"></i> Reportes
             </button>
         </nav>
@@ -81,7 +80,7 @@
             <section id="section-ventas" class="tab-section">
                 <div class="section-header">
                     <h2>Gestión de Ventas y Pedidos</h2>
-                    <button onclick="abrirModalVenta()" class="btn-primary">
+                    <button type="button" onclick="abrirModalVenta()" class="btn-primary">
                         <i data-lucide="plus"></i> Nuevo Pedido
                     </button>
                 </div>
@@ -105,9 +104,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-ventas-body">
-                            <!-- Inyectado dinámicamente -->
-                        </tbody>
+                        <tbody id="tabla-ventas-body"></tbody>
                     </table>
                 </div>
             </section>
@@ -116,7 +113,7 @@
             <section id="section-clientes" class="tab-section hidden">
                 <div class="section-header">
                     <h2>Directorio de Clientes</h2>
-                    <button onclick="abrirModalCliente()" class="btn-primary">
+                    <button type="button" onclick="abrirModalCliente()" class="btn-primary">
                         <i data-lucide="user-plus"></i> Registrar Cliente
                     </button>
                 </div>
@@ -138,18 +135,16 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-clientes-body">
-                            <!-- Inyectado dinámicamente -->
-                        </tbody>
+                        <tbody id="tabla-clientes-body"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- TAB: CALCULADORA DE GANANCIAS (AJUSTADA A PORCENTAJE MANUAL) -->
+            <!-- TAB: CALCULADORA DE GANANCIAS MANUAL -->
             <section id="section-calculadora" class="tab-section hidden">
                 <div class="section-header">
                     <h2>Calculadora de Márgenes y Precios</h2>
-                    <p class="subtitle">Calcula costos, ganancias personalizadas y precios de venta finales</p>
+                    <p class="subtitle">Escribe el costo y el porcentaje exacto que deseas ganar</p>
                 </div>
 
                 <div class="calc-grid">
@@ -163,18 +158,17 @@
                         <div class="form-group">
                             <label for="calc-ganancia-pct">Porcentaje de Ganancia Deseado (%):</label>
                             <div class="input-pct-wrapper">
-                                <input type="number" id="calc-ganancia-pct" step="0.5" placeholder="Ej: 35" value="50" oninput="calcularVentaManual()">
+                                <input type="number" id="calc-ganancia-pct" step="0.5" placeholder="Ej: 28, 50, 200..." value="30" oninput="calcularVentaManual()">
                                 <span class="pct-suffix">%</span>
                             </div>
                         </div>
 
-                        <!-- Atajos Rápidos -->
                         <div class="quick-pct-buttons">
-                            <button onclick="setPorcentajeRapido(25)" class="btn-quick">25%</button>
-                            <button onclick="setPorcentajeRapido(35)" class="btn-quick">35%</button>
-                            <button onclick="setPorcentajeRapido(50)" class="btn-quick">50%</button>
-                            <button onclick="setPorcentajeRapido(100)" class="btn-quick">100%</button>
-                            <button onclick="setPorcentajeRapido(150)" class="btn-quick">150%</button>
+                            <button type="button" onclick="setPorcentajeRapido(25)" class="btn-quick">25%</button>
+                            <button type="button" onclick="setPorcentajeRapido(35)" class="btn-quick">35%</button>
+                            <button type="button" onclick="setPorcentajeRapido(50)" class="btn-quick">50%</button>
+                            <button type="button" onclick="setPorcentajeRapido(100)" class="btn-quick">100%</button>
+                            <button type="button" onclick="setPorcentajeRapido(150)" class="btn-quick">150%</button>
                         </div>
                     </div>
 
@@ -186,15 +180,15 @@
                         </div>
                         <div class="result-item">
                             <span>Porcentaje Aplicado:</span>
-                            <strong id="res-porcentaje">50%</strong>
+                            <strong id="res-porcentaje">30%</strong>
                         </div>
-                        <div class="result-item accent-item">
+                        <div class="result-item">
                             <span>Ganancia Neta:</span>
-                            <strong id="res-ganancia">$0.00</strong>
+                            <strong id="res-ganancia" style="color: var(--success);">$0.00</strong>
                         </div>
                         <div class="result-divider"></div>
                         <div class="result-item total-item">
-                            <span>Precio Sugerido:</span>
+                            <span>Precio de Venta Final:</span>
                             <strong id="res-precio-final">$0.00</strong>
                         </div>
                     </div>
@@ -205,8 +199,8 @@
             <section id="section-reportes" class="tab-section hidden">
                 <div class="section-header">
                     <h2>Resumen Financiero y Rendimiento</h2>
-                    <button onclick="exportarReporte()" class="btn-secondary">
-                        <i data-lucide="download"></i> Exportar Datos
+                    <button type="button" onclick="exportarReporte()" class="btn-primary">
+                        <i data-lucide="download"></i> Exportar CSV
                     </button>
                 </div>
 
@@ -242,10 +236,8 @@
                 </div>
 
                 <div class="report-box">
-                    <h3>Estado General de Pedidos</h3>
-                    <ul class="report-summary-list" id="report-summary-list">
-                        <!-- Dinámico -->
-                    </ul>
+                    <h3 style="margin-bottom: 12px;">Estado General de Pedidos</h3>
+                    <ul class="report-summary-list" id="report-summary-list" style="list-style: none;"></ul>
                 </div>
             </section>
         </main>
@@ -256,7 +248,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modal-venta-title">Nuevo Pedido</h3>
-                <button onclick="cerrarModalVenta()" class="btn-close">&times;</button>
+                <button type="button" onclick="cerrarModalVenta()" class="btn-close">&times;</button>
             </div>
             <form id="form-venta" onsubmit="guardarVenta(event)">
                 <input type="hidden" id="venta-id">
@@ -310,7 +302,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Registrar Cliente</h3>
-                <button onclick="cerrarModalCliente()" class="btn-close">&times;</button>
+                <button type="button" onclick="cerrarModalCliente()" class="btn-close">&times;</button>
             </div>
             <form id="form-cliente" onsubmit="guardarCliente(event)">
                 <div class="form-group">
@@ -335,13 +327,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Registrar Abono</h3>
-                <button onclick="cerrarModalAbono()" class="btn-close">&times;</button>
+                <button type="button" onclick="cerrarModalAbono()" class="btn-close">&times;</button>
             </div>
             <form id="form-abono" onsubmit="procesarAbonoExtra(event)">
                 <input type="hidden" id="abono-venta-id">
-                <div class="abono-info-box">
-                    <p>Pedido: <strong id="abono-pedido-info">-</strong></p>
-                    <p>Saldo pendiente actual: <strong id="abono-saldo-info">$0.00</strong></p>
+                <div style="background: #14100d; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--card-border);">
+                    <p style="margin-bottom: 6px; font-size: 0.9rem;">Pedido: <strong id="abono-pedido-info">-</strong></p>
+                    <p style="font-size: 0.9rem;">Saldo pendiente actual: <strong id="abono-saldo-info" style="color: var(--warning);">$0.00</strong></p>
                 </div>
                 <div class="form-group">
                     <label for="abono-monto">Monto del Abono ($):</label>
