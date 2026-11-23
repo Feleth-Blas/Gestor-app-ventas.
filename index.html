@@ -1,349 +1,463 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor Pro - Control de Negocio</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor Pro - Control de Negocio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
-<body>
-    <!-- Pantalla de Login -->
-    <div id="login-screen" class="login-container">
-        <div class="login-card">
-            <span class="badge-tag">SISTEMA DE GESTIÓN</span>
-            <div class="login-logo-container">
-                <img src="icon.png.jpg" alt="Logo Gestor Pro" id="login-app-logo">
-            </div>
-            <h2>Impulsa tu Taller</h2>
-            <p class="subtitle">Conecta tu cuenta y organiza tus ventas al máximo</p>
+<body id="body-app" class="theme-orange-dark">
 
-            <button type="button" onclick="iniciarConGoogle()" class="btn-google">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google logo">
-                Usar cuenta de Google
-            </button>
+  <!-- Lienzo de Animaciones -->
+  <div id="bg-animation-layer" class="bg-particles anim-orbs">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
 
-            <div class="divider"><span>o ingresa tus datos</span></div>
+  <!-- MODAL: GALERÍA DE ESTILOS -->
+  <div id="modal-estilos" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class='bx bxs-palette'></i> Galería de Estilos</h3>
+        <button class="icon-btn" onclick="cerrarModal('modal-estilos')"><i class='bx bx-x'></i></button>
+      </div>
+      <p class="modal-desc">Personaliza colores, animaciones y efectos de sonido</p>
 
-            <form id="form-login" onsubmit="procesarLogin(event)">
-                <div class="input-group">
-                    <input type="email" id="login-email" placeholder="Correo electrónico (ej: tu@gmail.com)" required>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="login-pass" placeholder="Contraseña" required>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="login-taller" placeholder="Nombre de tu Taller" required>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="login-nombre" placeholder="Tu Nombre / Administrador" required>
-                </div>
-                <button type="submit" class="btn-primary w-100">Entrar al Panel →</button>
-            </form>
+      <!-- 4. EFECTOS DE SONIDO SUTILES -->
+      <div class="anim-toggle-box" style="margin-bottom: 1rem;">
+        <div>
+          <strong>🔊 Sonidos de Interacción</strong>
+          <small style="display:block; color:var(--muted);">Efectos de audio al hacer clic o entregar</small>
         </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-sonidos" checked onchange="toggleSonidosAudio()">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <p class="mini-label">✨ Efecto de Fondo:</p>
+      <div class="themes-grid" style="margin-bottom: 1rem;">
+        <button type="button" class="theme-option" onclick="seleccionarAnimacion('none')"><span>🚫 Sin Efecto</span></button>
+        <button type="button" class="theme-option" onclick="seleccionarAnimacion('orbs')"><span>🔮 Orbes Luz</span></button>
+        <button type="button" class="theme-option" onclick="seleccionarAnimacion('sparks')"><span>✨ Chispas</span></button>
+        <button type="button" class="theme-option" onclick="seleccionarAnimacion('waves')"><span>🌊 Ondas Neón</span></button>
+      </div>
+
+      <p class="mini-label">🎨 Paleta de Colores:</p>
+      <div class="themes-grid">
+        <button class="theme-option" onclick="aplicarTema('theme-orange-dark')"><span class="swatch" style="background: linear-gradient(135deg, #050507 50%, #fb923c 50%);"></span><span>Fuego & Negro</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-violet-dark')"><span class="swatch" style="background: linear-gradient(135deg, #050507 50%, #7c3aed 50%);"></span><span>Violeta & Negro</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-mint-dark')"><span class="swatch" style="background: linear-gradient(135deg, #050507 50%, #34d399 50%);"></span><span>Verde Tierno</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-rose-dark')"><span class="swatch" style="background: linear-gradient(135deg, #050507 50%, #f43f5e 50%);"></span><span>Rosa & Rojo</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-blue-dark')"><span class="swatch" style="background: linear-gradient(135deg, #050507 50%, #38bdf8 50%);"></span><span>Azul & Celeste</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-gold-dark')"><span class="swatch" style="background: linear-gradient(135deg, #050507 50%, #fbbf24 50%);"></span><span>Dorado Luxury</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-light-violet')"><span class="swatch" style="background: linear-gradient(135deg, #f1f5f9 50%, #6d28d9 50%);"></span><span>Claro Violeta</span></button>
+        <button class="theme-option" onclick="aplicarTema('theme-light-mint')"><span class="swatch" style="background: linear-gradient(135deg, #ecfdf5 50%, #10b981 50%);"></span><span>Claro Menta</span></button>
+      </div>
+
+      <button class="btn-gradient" style="width:100%; margin-top:1rem;" onclick="cerrarModal('modal-estilos')">Listo, Aplicar Estilo</button>
     </div>
+  </div>
 
-    <!-- Panel Principal de la Aplicación -->
-    <div id="app-screen" class="app-container hidden">
-        <header class="main-header">
-            <div class="header-brand">
-                <img src="icon.png.jpg" alt="Logo" class="header-logo">
-                <div>
-                    <h1 id="header-taller-name">Mi Taller</h1>
-                    <p class="user-welcome">Hola, <span id="user-display-name">Usuario</span> • <span class="badge-role">Admin</span></p>
-                </div>
-            </div>
-            <button type="button" onclick="cerrarSesion()" class="btn-logout" title="Cerrar sesión">
-                <i data-lucide="log-out"></i>
-            </button>
-        </header>
+  <!-- MODAL: PERFIL Y EQUIPO -->
+  <div id="modal-perfil" class="modal-overlay hidden">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h3><i class='bx bxs-user-badge'></i> Perfil y Sincronización</h3>
+        <button class="icon-btn" onclick="cerrarModal('modal-perfil')"><i class='bx bx-x'></i></button>
+      </div>
+      <p class="modal-desc">Personaliza tu taller y comparte datos con tus trabajadores</p>
 
-        <!-- Barra de Navegación / Tabs -->
-        <nav class="nav-tabs">
-            <button type="button" onclick="cambiarTab('ventas')" id="tab-ventas" class="tab-btn active">
-                <i data-lucide="shopping-cart"></i> Ventas y Pedidos
-            </button>
-            <button type="button" onclick="cambiarTab('clientes')" id="tab-clientes" class="tab-btn">
-                <i data-lucide="users"></i> Clientes
-            </button>
-            <button type="button" onclick="cambiarTab('calculadora')" id="tab-calculadora" class="tab-btn">
-                <i data-lucide="calculator"></i> Calculadora
-            </button>
-            <button type="button" onclick="cambiarTab('reportes')" id="tab-reportes" class="tab-btn">
-                <i data-lucide="trending-up"></i> Reportes
-            </button>
-        </nav>
+      <div class="perfil-foto-box">
+        <img id="preview-foto-perfil" src="" class="avatar-grande hidden" alt="Logo">
+        <div id="placeholder-foto-perfil" class="avatar-grande"><i class='bx bxs-store'></i></div>
+        <label for="input-foto-perfil" class="btn-foto-label"><i class='bx bx-camera'></i> Cambiar Logo (Opcional)</label>
+        <input type="file" id="input-foto-perfil" accept="image/*" class="hidden" onchange="cargarFotoPerfil(event)">
+      </div>
 
-        <main class="content-area">
-            <!-- TAB: VENTAS -->
-            <section id="section-ventas" class="tab-section">
-                <div class="section-header">
-                    <h2>Gestión de Ventas y Pedidos</h2>
-                    <button type="button" onclick="abrirModalVenta()" class="btn-primary">
-                        <i data-lucide="plus"></i> Nuevo Pedido
-                    </button>
-                </div>
+      <form id="form-perfil-negocio" class="stack-form">
+        <label>Nombre del Taller / Negocio:</label>
+        <input type="text" id="edit-empresa" placeholder="Ej: El Taller de los Blas" required>
+        <label>Tu Nombre o Saludo:</label>
+        <input type="text" id="edit-usuario" placeholder="Ej: Felet" required>
+        <label>Rol:</label>
+        <select id="edit-rol">
+          <option value="Dueño/a (Administrador)">👑 Dueño/a (Administrador)</option>
+          <option value="Trabajador/a (Equipo)">🛠️ Trabajador/a (Equipo)</option>
+        </select>
+        <button type="submit" class="btn-gradient">Guardar Cambios</button>
+      </form>
 
-                <div class="search-bar">
-                    <i data-lucide="search" class="search-icon"></i>
-                    <input type="text" id="buscar-venta" placeholder="Buscar pedido por cliente, producto o descripción..." oninput="filtrarVentas()">
-                </div>
-
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Cliente</th>
-                                <th>Producto / Detalle</th>
-                                <th>Total</th>
-                                <th>Abono</th>
-                                <th>Saldo</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-ventas-body"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- TAB: CLIENTES -->
-            <section id="section-clientes" class="tab-section hidden">
-                <div class="section-header">
-                    <h2>Directorio de Clientes</h2>
-                    <button type="button" onclick="abrirModalCliente()" class="btn-primary">
-                        <i data-lucide="user-plus"></i> Registrar Cliente
-                    </button>
-                </div>
-
-                <div class="search-bar">
-                    <i data-lucide="search" class="search-icon"></i>
-                    <input type="text" id="buscar-cliente" placeholder="Buscar cliente por nombre, teléfono o correo..." oninput="filtrarClientes()">
-                </div>
-
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Teléfono</th>
-                                <th>Correo</th>
-                                <th>Pedidos Realizados</th>
-                                <th>Total Compras</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla-clientes-body"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- TAB: CALCULADORA DE GANANCIAS MANUAL -->
-            <section id="section-calculadora" class="tab-section hidden">
-                <div class="section-header">
-                    <h2>Calculadora de Márgenes y Precios</h2>
-                    <p class="subtitle">Escribe el costo y el porcentaje exacto que deseas ganar</p>
-                </div>
-
-                <div class="calc-grid">
-                    <div class="calc-card">
-                        <h3>Datos de Costo y Margen</h3>
-                        <div class="form-group">
-                            <label for="calc-costo">Costo de Producción / Insumo ($):</label>
-                            <input type="number" id="calc-costo" step="0.01" placeholder="Ej: 45.00" oninput="calcularVentaManual()">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="calc-ganancia-pct">Porcentaje de Ganancia Deseado (%):</label>
-                            <div class="input-pct-wrapper">
-                                <input type="number" id="calc-ganancia-pct" step="0.5" placeholder="Ej: 28, 50, 200..." value="30" oninput="calcularVentaManual()">
-                                <span class="pct-suffix">%</span>
-                            </div>
-                        </div>
-
-                        <div class="quick-pct-buttons">
-                            <button type="button" onclick="setPorcentajeRapido(25)" class="btn-quick">25%</button>
-                            <button type="button" onclick="setPorcentajeRapido(35)" class="btn-quick">35%</button>
-                            <button type="button" onclick="setPorcentajeRapido(50)" class="btn-quick">50%</button>
-                            <button type="button" onclick="setPorcentajeRapido(100)" class="btn-quick">100%</button>
-                            <button type="button" onclick="setPorcentajeRapido(150)" class="btn-quick">150%</button>
-                        </div>
-                    </div>
-
-                    <div class="calc-card result-card">
-                        <h3>Resultados del Análisis</h3>
-                        <div class="result-item">
-                            <span>Costo Inicial:</span>
-                            <strong id="res-costo">$0.00</strong>
-                        </div>
-                        <div class="result-item">
-                            <span>Porcentaje Aplicado:</span>
-                            <strong id="res-porcentaje">30%</strong>
-                        </div>
-                        <div class="result-item">
-                            <span>Ganancia Neta:</span>
-                            <strong id="res-ganancia" style="color: var(--success);">$0.00</strong>
-                        </div>
-                        <div class="result-divider"></div>
-                        <div class="result-item total-item">
-                            <span>Precio de Venta Final:</span>
-                            <strong id="res-precio-final">$0.00</strong>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB: REPORTES -->
-            <section id="section-reportes" class="tab-section hidden">
-                <div class="section-header">
-                    <h2>Resumen Financiero y Rendimiento</h2>
-                    <button type="button" onclick="exportarReporte()" class="btn-primary">
-                        <i data-lucide="download"></i> Exportar CSV
-                    </button>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <i data-lucide="dollar-sign" class="stat-icon income"></i>
-                        <div>
-                            <p>Total Vendido</p>
-                            <h3 id="stat-total-vendido">$0.00</h3>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i data-lucide="piggy-bank" class="stat-icon collected"></i>
-                        <div>
-                            <p>Total Recaudado (Abonos)</p>
-                            <h3 id="stat-total-recaudado">$0.00</h3>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i data-lucide="clock" class="stat-icon pending"></i>
-                        <div>
-                            <p>Por Cobrar (Saldos)</p>
-                            <h3 id="stat-total-pendiente">$0.00</h3>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <i data-lucide="package" class="stat-icon orders"></i>
-                        <div>
-                            <p>Pedidos Totales</p>
-                            <h3 id="stat-total-pedidos">0</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="report-box">
-                    <h3 style="margin-bottom: 12px;">Estado General de Pedidos</h3>
-                    <ul class="report-summary-list" id="report-summary-list" style="list-style: none;"></ul>
-                </div>
-            </section>
-        </main>
+      <hr class="sep-line">
+      <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: var(--primary-light);"><i class='bx bx-share-alt'></i> Respaldo para Trabajadores</h4>
+      <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 10px;">Exporta los datos para pasárselos a tu equipo por WhatsApp.</p>
+      
+      <div class="stack-form">
+        <button type="button" class="btn-gradient" style="background: #16a34a;" onclick="exportarDatosEquipo()"><i class='bx bx-download'></i> Descargar Copia (.json)</button>
+        <label for="importar-json-input" class="btn-gray" style="text-align:center; display:block;"><i class='bx bx-upload'></i> Cargar Copia Recibida</label>
+        <input type="file" id="importar-json-input" accept=".json" class="hidden" onclick="reproducirSonidoClick()" onchange="importarDatosEquipo(event)">
+      </div>
     </div>
+  </div>
 
-    <!-- MODAL: NUEVA / EDITAR VENTA -->
-    <div id="modal-venta" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-venta-title">Nuevo Pedido</h3>
-                <button type="button" onclick="cerrarModalVenta()" class="btn-close">&times;</button>
-            </div>
-            <form id="form-venta" onsubmit="guardarVenta(event)">
-                <input type="hidden" id="venta-id">
-                
-                <div class="form-group">
-                    <label for="venta-cliente">Seleccionar Cliente:</label>
-                    <select id="venta-cliente" required>
-                        <option value="">-- Elige un cliente --</option>
-                    </select>
-                </div>
+  <!-- MODAL: CALCULADORA DE SUBLIMACIÓN -->
+  <div id="modal-calculadora" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class='bx bxs-calculator'></i> Calculadora de Precios</h3>
+        <button class="icon-btn" onclick="cerrarModal('modal-calculadora')"><i class='bx bx-x'></i></button>
+      </div>
+      <p class="modal-desc">Calcula el precio sugerido para asegurar tu ganancia</p>
 
-                <div class="form-group">
-                    <label for="venta-producto">Producto / Descripción:</label>
-                    <input type="text" id="venta-producto" placeholder="Ej: 20 Camisetas sublimadas, Taza cerámica..." required>
-                </div>
+      <div class="stack-form">
+        <label>Costo del artículo en blanco ($):</label>
+        <input type="number" id="calc-costo-base" placeholder="Ej: 2.50" step="0.01" oninput="calcularPrecioSublimacion()">
+        
+        <label>Costo de tinta, papel e insumos ($):</label>
+        <input type="number" id="calc-insumos" placeholder="Ej: 0.60" step="0.01" oninput="calcularPrecioSublimacion()">
 
-                <div class="form-row">
-                    <div class="form-group col">
-                        <label for="venta-total">Precio Total ($):</label>
-                        <input type="number" id="venta-total" step="0.01" placeholder="0.00" required oninput="actualizarSaldoModal()">
-                    </div>
-                    <div class="form-group col">
-                        <label for="venta-abono">Abono Inicial ($):</label>
-                        <input type="number" id="venta-abono" step="0.01" placeholder="0.00" value="0.00" oninput="actualizarSaldoModal()">
-                    </div>
-                </div>
+        <label>Porcentaje de Ganancia deseado (%):</label>
+        <input type="number" id="calc-porcentaje" placeholder="Ej: 28, 50, 100..." step="0.1" value="100" oninput="calcularPrecioSublimacion()">
+          <option value="1.5">50% de ganancia</option>
+          <option value="2.0" selected>100% (Duplicar inversión)</option>
+          <option value="2.5">150% de ganancia alta</option>
+        </select>
 
-                <div class="form-row">
-                    <div class="form-group col">
-                        <label>Saldo Pendiente:</label>
-                        <div class="saldo-display" id="venta-saldo-display">$0.00</div>
-                    </div>
-                    <div class="form-group col">
-                        <label for="venta-estado">Estado del Pedido:</label>
-                        <select id="venta-estado" required>
-                            <option value="Pendiente">Pendiente</option>
-                            <option value="En Proceso">En Proceso</option>
-                            <option value="Entregado">Entregado</option>
-                            <option value="Cancelado">Cancelado</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary w-100">Guardar Pedido</button>
-            </form>
+        <div class="calc-result-box">
+          <small>Precio de Venta Sugerido:</small>
+          <h2 id="calc-resultado-final" class="text-emerald">$0.00</h2>
+          <small id="calc-ganancia-neta" style="color:var(--accent);">Ganancia neta estimada: $0.00</small>
         </div>
-    </div>
 
-    <!-- MODAL: REGISTRAR CLIENTE -->
-    <div id="modal-cliente" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Registrar Cliente</h3>
-                <button type="button" onclick="cerrarModalCliente()" class="btn-close">&times;</button>
-            </div>
-            <form id="form-cliente" onsubmit="guardarCliente(event)">
-                <div class="form-group">
-                    <label for="cliente-nombre">Nombre Completo:</label>
-                    <input type="text" id="cliente-nombre" placeholder="Ej: María López" required>
-                </div>
-                <div class="form-group">
-                    <label for="cliente-telefono">Teléfono / WhatsApp:</label>
-                    <input type="tel" id="cliente-telefono" placeholder="Ej: +505 8888 8888">
-                </div>
-                <div class="form-group">
-                    <label for="cliente-email">Correo electrónico:</label>
-                    <input type="email" id="cliente-email" placeholder="Ej: maria@gmail.com">
-                </div>
-                <button type="submit" class="btn-primary w-100">Registrar Cliente</button>
-            </form>
+        <button type="button" class="btn-gradient" onclick="usarPrecioCalculado()">Usar este precio en un Pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ABONOS MÚLTIPLES -->
+  <div id="modal-abonos" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class='bx bx-money'></i> Registrar Abono Extra</h3>
+        <button class="icon-btn" onclick="cerrarModal('modal-abonos')"><i class='bx bx-x'></i></button>
+      </div>
+      <p class="modal-desc" id="abono-cliente-titulo">Abonar a pedido</p>
+
+      <form id="form-registrar-abono" class="stack-form">
+        <input type="hidden" id="abono-pedido-id">
+        <label>Monto a abonar ahora ($):</label>
+        <input type="number" id="abono-monto-extra" placeholder="Ej: 5.00" step="0.01" required>
+        <div class="btn-row">
+          <button type="submit" class="btn-gradient">Guardar Abono</button>
+          <button type="button" class="btn-gray" onclick="cerrarModal('modal-abonos')">Cancelar</button>
         </div>
+      </form>
     </div>
+  </div>
 
-    <!-- MODAL: REGISTRAR ABONO EXTRA -->
-    <div id="modal-abono" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Registrar Abono</h3>
-                <button type="button" onclick="cerrarModalAbono()" class="btn-close">&times;</button>
-            </div>
-            <form id="form-abono" onsubmit="procesarAbonoExtra(event)">
-                <input type="hidden" id="abono-venta-id">
-                <div style="background: #14100d; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--card-border);">
-                    <p style="margin-bottom: 6px; font-size: 0.9rem;">Pedido: <strong id="abono-pedido-info">-</strong></p>
-                    <p style="font-size: 0.9rem;">Saldo pendiente actual: <strong id="abono-saldo-info" style="color: var(--warning);">$0.00</strong></p>
-                </div>
-                <div class="form-group">
-                    <label for="abono-monto">Monto del Abono ($):</label>
-                    <input type="number" id="abono-monto" step="0.01" min="0.01" placeholder="0.00" required>
-                </div>
-                <button type="submit" class="btn-primary w-100">Aplicar Abono</button>
-            </form>
+  <!-- PANTALLA DE LOGIN -->
+  <div id="vista-auth" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-badge">SISTEMA DE GESTIÓN</div>
+      <div class="auth-logo"><i class='bx bxs-bolt-circle'></i></div>
+      <h2>Impulsa tu Taller</h2>
+      <p>Conecta tu cuenta y organiza tus ventas al máximo</p>
+      
+      <button type="button" class="btn-google" onclick="autocompletarGoogle()">
+        <i class='bx bxl-google'></i> Usar cuenta de Google
+      </button>
+
+      <div class="divider"><span>o ingresa tus datos</span></div>
+
+      <form id="form-auth" class="stack-form">
+        <input type="email" id="auth-correo" placeholder="Tu correo (ej: felet@gmail.com)" required>
+        <input type="password" id="auth-pass" placeholder="Contraseña" required>
+        <input type="text" id="auth-empresa" placeholder="Nombre de tu Taller (Ej: El Taller de los Blas)" required>
+        <input type="text" id="auth-usuario" placeholder="Tu Nombre o Saludo (Ej: Felet)" required>
+        <button type="submit" class="btn-gradient">Entrar al Panel <i class='bx bx-right-arrow-alt'></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Barra Superior -->
+  <header class="top-bar" id="top-bar">
+    <button id="btn-volver" class="icon-btn hidden" onclick="irA('inicio')"><i class='bx bx-arrow-back'></i></button>
+    <div class="header-titles" onclick="abrirModal('modal-perfil')" style="cursor:pointer;">
+      <div class="header-brand">
+        <img id="header-avatar-img" src="" class="mini-avatar hidden" alt="Perfil">
+        <h1 id="titulo-pantalla">El Taller de los Blas</h1>
+      </div>
+      <span id="subtitulo-pantalla">Hola, Felet 👋</span>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="abrirModal('modal-calculadora')" title="Calculadora"><i class='bx bxs-calculator' style="color: var(--accent);"></i></button>
+      <button class="icon-btn" onclick="abrirModal('modal-estilos')" title="Galería y Sonidos"><i class='bx bxs-palette' style="color: var(--primary-light);"></i></button>
+      <button class="icon-btn" onclick="abrirModal('modal-perfil')" title="Perfil"><i class='bx bxs-user-circle'></i></button>
+      <button class="icon-btn" onclick="cerrarSesion()" title="Salir"><i class='bx bx-log-out'></i></button>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- VISTA 1: INICIO (CON GRÁFICAS VISUALES Y FILTRO) -->
+    <section id="vista-inicio" class="vista active">
+      
+      <div class="filter-box">
+        <label><i class='bx bx-filter-alt'></i> Periodo Financiero:</label>
+        <select id="filtro-periodo" onchange="actualizarInicio()">
+          <option value="hoy">📅 Hoy</option>
+          <option value="semana">📆 Semana Actual</option>
+          <option value="mes" selected>📊 Este Mes Actual</option>
+          <option value="historico">🏆 Histórico Total</option>
+        </select>
+      </div>
+
+      <div class="finance-grid">
+        <div class="finance-card grad-main" onclick="irA('ventas')">
+          <span class="finance-label"><i class='bx bx-trending-up'></i> INGRESOS</span>
+          <h2 id="dash-ingresos">$0.00</h2>
+          <small>en el periodo</small>
         </div>
-    </div>
+        <div class="finance-card grad-secondary" onclick="irA('gastos')">
+          <span class="finance-label"><i class='bx bx-trending-down'></i> GASTOS</span>
+          <h2 id="dash-gastos">$0.00</h2>
+          <small>en el periodo</small>
+        </div>
+      </div>
 
-    <script src="app.js"></script>
+      <div class="balance-strip">
+        <div><span>Ganancia Neta:</span><strong id="dash-balance" class="text-emerald">$0.00</strong></div>
+        <div><span>Por Cobrar:</span><strong id="dash-cobrar" class="text-amber">$0.00</strong></div>
+      </div>
+
+      <!-- 1. GRÁFICAS ESTADÍSTICAS VISUALES -->
+      <div class="form-card" style="margin-bottom: 14px;">
+        <h4 style="display:flex; justify-content:space-between; align-items:center;">
+          <span><i class='bx bx-bar-chart-alt-2'></i> Rendimiento Visual</span>
+          <small style="font-size:0.75rem; color:var(--muted);">Ingresos vs Gastos</small>
+        </h4>
+        <div class="chart-container">
+          <div class="chart-bar-wrap">
+            <span id="chart-val-ingresos" class="chart-num">$0</span>
+            <div class="chart-bar-track"><div id="bar-ingresos" class="chart-fill fill-emerald" style="height: 0%;"></div></div>
+            <small>Ingresos</small>
+          </div>
+          <div class="chart-bar-wrap">
+            <span id="chart-val-gastos" class="chart-num">$0</span>
+            <div class="chart-bar-track"><div id="bar-gastos" class="chart-fill fill-accent" style="height: 0%;"></div></div>
+            <small>Gastos</small>
+          </div>
+          <div class="chart-bar-wrap">
+            <span id="chart-val-ganancia" class="chart-num">$0</span>
+            <div class="chart-bar-track"><div id="bar-ganancia" class="chart-fill fill-blue" style="height: 0%;"></div></div>
+            <small>Ganancia</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card" onclick="irA('clientes')"><div class="menu-card-top"><h3>Clientes</h3><i class='bx bx-right-arrow-alt arrow-accent'></i></div><div class="menu-card-body"><span class="big-num" id="count-clientes">0</span><small>registrados</small></div></div>
+        <div class="menu-card" onclick="irA('pedidos')"><div class="menu-card-top"><h3>Pedidos</h3><i class='bx bx-right-arrow-alt arrow-accent'></i></div><div class="menu-card-body"><span class="big-num" id="count-pedidos">0</span><small>pendientes</small></div></div>
+        <div class="menu-card" onclick="irA('historial')"><div class="menu-card-top"><h3>Historial</h3><i class='bx bx-right-arrow-alt arrow-accent'></i></div><div class="menu-card-body"><span class="big-num text-emerald" id="count-historial">0</span><small>compras y VIP</small></div></div>
+        <div class="menu-card" onclick="irA('productos')"><div class="menu-card-top"><h3>Productos</h3><i class='bx bx-right-arrow-alt arrow-accent'></i></div><div class="menu-card-body"><span class="big-num" id="count-productos">0</span><small>catálogo</small></div></div>
+        <div class="menu-card" onclick="irA('calendario')"><div class="menu-card-top"><h3>Calendario</h3><i class='bx bx-right-arrow-alt arrow-accent'></i></div><div class="menu-card-body"><i class='bx bx-calendar calendar-icon'></i><small>agenda</small></div></div>
+        <div class="menu-card" onclick="irA('gastos')"><div class="menu-card-top"><h3>Gastos</h3><i class='bx bx-right-arrow-alt arrow-accent'></i></div><div class="menu-card-body"><i class='bx bx-receipt calendar-icon text-accent'></i><small>insumos</small></div></div>
+      </div>
+    </section>
+
+    <!-- VISTA 2: CLIENTES -->
+    <section id="vista-clientes" class="vista">
+      <p class="section-desc">Clientes y nivel de fidelidad (VIP a partir de 3 compras).</p>
+      <div class="action-grid-3">
+        <button class="action-tile" onclick="toggleForm('form-cliente-box')"><div class="tile-top"><span>Registrar</span><i class='bx bx-right-arrow-alt'></i></div><i class='bx bx-plus tile-icon'></i><small>nuevo cliente</small></button>
+        <button class="action-tile" onclick="document.getElementById('buscar-cliente').focus()"><div class="tile-top"><span>Buscar</span><i class='bx bx-right-arrow-alt'></i></div><i class='bx bx-search tile-icon'></i><small>clientes</small></button>
+        <button class="action-tile" onclick="importarContactoTelefono()"><div class="tile-top"><span>Importar</span><i class='bx bx-right-arrow-alt'></i></div><i class='bx bxs-contact tile-icon'></i><small>contacto</small></button>
+      </div>
+
+      <div id="form-cliente-box" class="form-card hidden">
+        <h4>Nuevo Cliente</h4>
+        <form id="form-cliente" class="stack-form">
+          <input type="text" id="cli-nombre" placeholder="Nombre completo" required>
+          <input type="tel" id="cli-telefono" placeholder="Teléfono / WhatsApp" required>
+          <input type="text" id="cli-direccion" placeholder="Dirección (Opcional)">
+          <input type="text" id="cli-notas" placeholder="Notas">
+          <div class="btn-row">
+            <button type="submit" class="btn-gradient">Guardar Cliente</button>
+            <button type="button" class="btn-gray" onclick="toggleForm('form-cliente-box')">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="search-bar"><i class='bx bx-search'></i><input type="text" id="buscar-cliente" placeholder="Localizar cliente..." oninput="renderClientes()"></div>
+      <div id="lista-clientes" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 2B: PERFIL CLIENTE -->
+    <section id="vista-perfil-cliente" class="vista">
+      <div class="profile-banner">
+        <div class="avatar-circle"><i class='bx bxs-user'></i></div>
+        <h2 id="perfil-nombre">Cliente</h2>
+        <div id="perfil-badge-vip" class="vip-pill hidden">⭐ CLIENTE VIP</div>
+        <p id="perfil-tel">0000-0000</p>
+        <a id="perfil-wa-btn" href="#" target="_blank" class="btn-wa-pill"><i class='bx bxl-whatsapp'></i> Enviar Mensaje</a>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card"><div class="menu-card-top"><h3>Compras</h3></div><div class="menu-card-body"><span class="big-num text-emerald" id="perfil-total-compras">0</span><small>pedidos</small></div></div>
+        <div class="menu-card"><div class="menu-card-top"><h3>Pagado</h3></div><div class="menu-card-body"><span class="big-num" id="perfil-pagado">$0.00</span><small>abonado</small></div></div>
+        <div class="menu-card"><div class="menu-card-top"><h3>A recibir</h3></div><div class="menu-card-body"><span class="big-num text-amber" id="perfil-deuda">$0.00</span><small>pendiente</small></div></div>
+        <div class="menu-card"><div class="menu-card-top"><h3>Notas</h3></div><div class="menu-card-body"><i class='bx bxs-note text-accent' style="font-size: 1.5rem;"></i><small id="perfil-notas">Sin notas</small></div></div>
+      </div>
+      <h4 class="sub-heading">Historial de Compras</h4>
+      <div id="perfil-historial-pedidos" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 3: PEDIDOS (CON ABONOS MÚLTIPLES) -->
+    <section id="vista-pedidos" class="vista">
+      <p class="section-desc">Agende pedidos, registre abonos por partes y entregue.</p>
+      <div class="action-grid-2">
+        <button class="action-tile" onclick="toggleForm('form-pedido-box')"><div class="tile-top"><span>Nuevo Pedido</span><i class='bx bx-right-arrow-alt'></i></div><i class='bx bx-plus tile-icon'></i><small>registrar</small></button>
+        <div class="action-tile static-tile"><div class="tile-top"><span>Pendientes</span></div><span class="big-num" id="pedidos-badge-pendientes">0</span><small>por entregar</small></div>
+      </div>
+
+      <div id="form-pedido-box" class="form-card hidden">
+        <h4>Agendar Nuevo Pedido</h4>
+        <form id="form-pedido" class="stack-form">
+          <label>Seleccionar Cliente:</label>
+          <select id="ped-cliente-select" required><option value="">-- Elige un cliente --</option></select>
+          <small class="helper-link" onclick="irA('clientes')">+ ¿Cliente nuevo? Regístralo aquí</small>
+
+          <label>Producto del Catálogo (Opcional):</label>
+          <select id="ped-producto-select" onchange="autocompletarProducto()"><option value="">-- Elegir producto --</option></select>
+
+          <input type="text" id="ped-descripcion" placeholder="¿Qué compró?" required>
+          <div class="two-cols">
+            <input type="number" id="ped-total" placeholder="Total ($)" step="0.01" required>
+            <input type="number" id="ped-abono" placeholder="Abono Inicial ($)" step="0.01" required>
+          </div>
+          <div class="two-cols">
+            <div><label>Fecha Entrega:</label><input type="date" id="ped-fecha" required></div>
+            <div><label>Hora Entrega:</label><input type="time" id="ped-hora" value="09:00" required></div>
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn-gradient">Guardar Pedido</button>
+            <button type="button" class="btn-gray" onclick="toggleForm('form-pedido-box')">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="search-bar"><i class='bx bx-search'></i><input type="text" id="buscar-pedido" placeholder="Buscar pedido..." oninput="renderPedidos()"></div>
+      <div id="lista-pedidos" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 3B: HISTORIAL -->
+    <section id="vista-historial" class="vista">
+      <p class="section-desc">Registro completo y clientes frecuentes.</p>
+      <div class="form-card">
+        <h4>🏆 Clientes Frecuentes (Descuento VIP)</h4>
+        <div id="ranking-frecuentes" class="vip-list"></div>
+      </div>
+      <div class="search-bar"><i class='bx bx-search'></i><input type="text" id="buscar-historial" placeholder="Filtrar historial..." oninput="renderHistorial()"></div>
+      <h4 class="sub-heading">Bitácora de Compras</h4>
+      <div id="lista-historial" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 4: PRODUCTOS -->
+    <section id="vista-productos" class="vista">
+      <p class="section-desc">Catálogo de artículos sublimables y precios.</p>
+      <div class="action-grid-2">
+        <button class="action-tile" onclick="toggleForm('form-producto-box')"><div class="tile-top"><span>Registrar</span><i class='bx bx-right-arrow-alt'></i></div><i class='bx bx-plus tile-icon'></i><small>nuevo producto</small></button>
+        <button class="action-tile" onclick="document.getElementById('buscar-producto').focus()"><div class="tile-top"><span>Buscar</span><i class='bx bx-right-arrow-alt'></i></div><i class='bx bx-search tile-icon'></i><small>consultar</small></button>
+      </div>
+
+      <div id="form-producto-box" class="form-card hidden">
+        <h4>Nuevo Artículo</h4>
+        <form id="form-producto" class="stack-form">
+          <input type="text" id="prod-nombre" placeholder="Nombre" required>
+          <div class="two-cols">
+            <input type="text" id="prod-color" placeholder="Color">
+            <input type="text" id="prod-talla" placeholder="Medida">
+          </div>
+          <div class="two-cols">
+            <input type="number" id="prod-precio" placeholder="Precio ($)" step="0.01" required>
+            <input type="number" id="prod-stock" placeholder="Stock" value="1">
+          </div>
+          <label>Foto:</label><input type="file" id="prod-foto" accept="image/*">
+          <div class="btn-row">
+            <button type="submit" class="btn-gradient">Guardar</button>
+            <button type="button" class="btn-gray" onclick="toggleForm('form-producto-box')">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="search-bar"><i class='bx bx-search'></i><input type="text" id="buscar-producto" placeholder="Localizar producto..." oninput="renderProductos()"></div>
+      <div id="lista-productos" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 5: VENTAS (CON 2. EXPORTAR REPORTE A EXCEL/CSV) -->
+    <section id="vista-ventas" class="vista">
+      <p class="section-desc">Resumen financiero y exportación de reportes.</p>
+      
+      <div class="finance-card grad-main" style="margin-bottom: 1rem;">
+        <span class="finance-label">TOTAL VENDIDO HISTÓRICO</span>
+        <h2 id="ventas-total-historico">$0.00</h2>
+      </div>
+
+      <div class="action-grid-2" style="margin-bottom: 1rem;">
+        <button type="button" class="btn-gradient" onclick="exportarReporteExcel()" style="background: var(--grad-2);">
+          <i class='bx bxs-file-export'></i> Descargar Reporte Excel (CSV)
+        </button>
+        <button type="button" class="btn-gradient" onclick="window.print()" style="background: var(--grad-1);">
+          <i class='bx bxs-printer'></i> Imprimir / Guardar PDF
+        </button>
+      </div>
+
+      <div id="lista-ventas" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 6: CALENDARIO -->
+    <section id="vista-calendario" class="vista">
+      <div class="calendar-wrapper">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="cambiarMes(-1)"><i class='bx bx-chevron-left'></i></button>
+          <h3 id="cal-mes-titulo">noviembre de 2026</h3>
+          <button class="cal-nav" onclick="cambiarMes(1)"><i class='bx bx-chevron-right'></i></button>
+        </div>
+        <div class="cal-weekdays"><span>dom</span><span>lun</span><span>mar</span><span>mié</span><span>jue</span><span>vie</span><span>sáb</span></div>
+        <div id="cal-dias-grid" class="cal-days"></div>
+      </div>
+      <h3 id="cal-fecha-seleccionada" class="sub-heading">Entregas del día</h3>
+      <div id="cal-lista-dia" class="list-container"></div>
+    </section>
+
+    <!-- VISTA 7: GASTOS -->
+    <section id="vista-gastos" class="vista">
+      <p class="section-desc">Registre compras de materiales e insumos.</p>
+      <div class="form-card">
+        <h4>Registrar Nuevo Gasto</h4>
+        <form id="form-gasto" class="stack-form">
+          <input type="text" id="gasto-desc" placeholder="Descripción" required>
+          <div class="two-cols">
+            <input type="number" id="gasto-monto" placeholder="Monto ($)" step="0.01" required>
+            <input type="date" id="gasto-fecha" required>
+          </div>
+          <button type="submit" class="btn-gradient">Registrar Gasto</button>
+        </form>
+      </div>
+      <h4 class="sub-heading">Historial de Gastos</h4>
+      <div id="lista-gastos" class="list-container"></div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <button onclick="irA('calendario')" id="nav-calendario" title="Calendario"><i class='bx bx-calendar'></i></button>
+    <button onclick="irA('historial')" id="nav-historial" title="Historial"><i class='bx bx-history'></i></button>
+    <button onclick="irA('inicio')" id="nav-inicio" class="active-nav" title="Inicio"><i class='bx bx-home-alt'></i></button>
+    <button onclick="irA('clientes')" id="nav-clientes" title="Clientes"><i class='bx bx-user'></i></button>
+    <button onclick="irA('pedidos')" id="nav-pedidos" title="Pedidos"><i class='bx bx-notepad'></i></button>
+  </nav>
+
+  <script src="app.js"></script>
 </body>
 </html>
